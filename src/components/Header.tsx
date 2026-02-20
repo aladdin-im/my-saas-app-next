@@ -1,8 +1,8 @@
 import ModeToggle from "@/components/ModeToggle";
-import { Button } from "@/components/ui/button";
 import { siteConfig } from "@/config/index";
 import Image from "next/image";
 import Link from "next/link";
+import UserMenu from "./UserMenu";
 
 // 导航链接配置
 const navLinks = [
@@ -37,15 +37,10 @@ const Header = () => {
                         </nav>
                     </div>
 
-                    {/* 右侧：功能按钮 + 主题切换 */}
+                    {/* 右侧：用户菜单 + 主题切换 */}
                     <div className="flex items-center gap-2">
-                        {/* 登录按钮（可扩展其他功能） */}
-                        <Button variant="ghost" size="sm" className="hidden sm:inline-flex">
-                            Sign In
-                        </Button>
-                        <Button size="sm" className="hidden sm:inline-flex">
-                            Get Started
-                        </Button>
+                        {/* 用户菜单 */}
+                        <UserMenu />
 
                         {/* 主题切换 */}
                         <ModeToggle />

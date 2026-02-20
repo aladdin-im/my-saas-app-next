@@ -1,6 +1,7 @@
 import { getCloudflareContext } from '@opennextjs/cloudflare';
 import { drizzle, PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
+import * as authSchema from './schema/auth-schema';
 import * as schema from './schema/schema';
 
 export type Database = PostgresJsDatabase<typeof schema>;
@@ -30,12 +31,12 @@ export async function getDb(): Promise<Database> {
         // Hyperdrive 在 Cloudflare 侧管理连接池，每次请求创建新实例即可
         // prepare: false 是 Hyperdrive 事务池模式的要求
         const client = postgres(connectionString, { prepare: false });
-        return drizzle({ client, schema: { ...schema } });
+        return drizzle({ client, schema: { ...schema, ...authSchema } });
     }
 
     if (!global._db) {
         const client = postgres(connectionString, { max: 1 });
-        global._db = drizzle({ client, schema: { ...schema } });
+        global._db = drizzle({ client, schema: { ...schema, ...authSchema } });
     }
     return global._db;
 }
