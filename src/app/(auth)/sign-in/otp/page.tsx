@@ -11,7 +11,7 @@ import { authClient } from "@/lib/auth-client"
 import { ArrowLeftIcon, LoaderCircleIcon } from "lucide-react"
 import Image from "next/image"
 import { useRouter, useSearchParams } from "next/navigation"
-import { useCallback, useState } from "react"
+import { Suspense, useCallback, useState } from "react"
 import { toast } from "sonner"
 
 const OTP_LENGTH = 6
@@ -26,6 +26,14 @@ function getOtpErrorMessage(err: { code?: string; message?: string }) {
 }
 
 export default function OtpPage() {
+    return (
+        <Suspense>
+            <OtpPageContent />
+        </Suspense>
+    )
+}
+
+function OtpPageContent() {
     const router = useRouter()
     const searchParams = useSearchParams()
     const email = searchParams.get("email") ?? ""

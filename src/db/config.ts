@@ -2,7 +2,7 @@ import { config } from 'dotenv';
 import { defineConfig } from 'drizzle-kit';
 
 // 明确指定加载 .env.local
-config({ path: '.env.local' });
+config({ path: '.env.development' });
 
 export default defineConfig({
     schema: './src/db/schema',
