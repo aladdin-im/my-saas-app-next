@@ -1,0 +1,6 @@
+export * from "./DiscordIcon"
+export * from "./FacebookIcon"
+export * from "./GithubIcon"
+export * from "./GoogleIcon"
+export * from "./RedditIcon"
+export * from "./XIcon"
