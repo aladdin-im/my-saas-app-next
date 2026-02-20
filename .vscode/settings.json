@@ -1,5 +1,14 @@
 {
 	"files.associations": {
 		"wrangler.json": "jsonc"
+	},
+	"editor.formatOnSave": true,
+	"editor.codeActionsOnSave": {
+		"source.organizeImports": "explicit"
+	},
+	"[mdx]": {
+		"editor.codeActionsOnSave": {
+			"source.organizeImports": "never"
+		}
 	}
 }
