@@ -26,11 +26,14 @@
 			"@/*": [
 				"./src/*"
 			],
-			"@config/*": [
+			"@/config/*": [
 				"./config/*"
 			],
-			"@content/*": [
+			"@/content/*": [
 				"./content/*"
+			],
+			"fumadocs-mdx:collections/*": [
+				"./.source/*"
 			]
 		},
 		"types": [

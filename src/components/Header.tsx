@@ -1,6 +1,6 @@
 import ModeToggle from "@/components/ModeToggle";
 import { Button } from "@/components/ui/button";
-import { siteConfig } from "@config/index";
+import { siteConfig } from "@/config/index";
 import Image from "next/image";
 import Link from "next/link";
 
