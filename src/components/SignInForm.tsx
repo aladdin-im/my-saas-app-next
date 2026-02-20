@@ -12,8 +12,9 @@ import { Input } from "@/components/ui/input"
 import { siteConfig } from "@/config/index"
 import { authClient } from "@/lib/auth-client"
 import { cn } from "@/lib/utils"
+import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { toast } from "sonner"
 
 export function SignInForm({
@@ -23,6 +24,8 @@ export function SignInForm({
     const router = useRouter()
     const [email, setEmail] = useState("")
     const [loading, setLoading] = useState(false)
+    const [turnstileToken, setTurnstileToken] = useState("")
+    const turnstileRef = useRef<TurnstileInstance>(null)
 
     const handleSignInWithGitHub = () => {
         authClient.signIn.social({
@@ -40,14 +43,30 @@ export function SignInForm({
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        if (!email) return
+        if (!email || !turnstileToken) return
         setLoading(true)
+
+        const verifyRes = await fetch("/api/verify-turnstile", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ token: turnstileToken }),
+        })
+        if (!verifyRes.ok) {
+            setLoading(false)
+            turnstileRef.current?.reset()
+            setTurnstileToken("")
+            toast.error("Human verification failed. Please try again.")
+            return
+        }
+
         const { error } = await authClient.emailOtp.sendVerificationOtp({
             email,
             type: "sign-in",
         })
         setLoading(false)
         if (error) {
+            turnstileRef.current?.reset()
+            setTurnstileToken("")
             toast.error(error.message ?? "Failed to send verification code")
             return
         }
@@ -84,7 +103,18 @@ export function SignInForm({
                     />
                 </Field>
                 <Field>
-                    <Button type="submit" size="lg" disabled={loading}>
+                    <div className="flex justify-center">
+                        <Turnstile
+                            ref={turnstileRef}
+                            siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
+                            onSuccess={setTurnstileToken}
+                            onExpire={() => setTurnstileToken("")}
+                            options={{ size: "flexible" }}
+                        />
+                    </div>
+                </Field>
+                <Field>
+                    <Button type="submit" size="lg" disabled={loading || !turnstileToken}>
                         {loading ? "Sending..." : "Continue"}
                     </Button>
                     <FieldDescription className="text-center">

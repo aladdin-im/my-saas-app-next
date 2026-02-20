@@ -17,6 +17,7 @@
 		"db:push": "npx drizzle-kit push --config src/db/config.ts"
 	},
 	"dependencies": {
+		"@marsidev/react-turnstile": "^1.4.2",
 		"@opennextjs/cloudflare": "^1.15.1",
 		"@react-email/components": "^1.0.8",
 		"@types/mdx": "^2.0.13",
